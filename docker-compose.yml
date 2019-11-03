@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+
+  minio:
+    hostname: minio
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    volumes:
+      - './minio/data:/data'
+    env_file: .env
+    command: server /data
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    ports:
+      - '4369:4369'
+      - '5671:5671'
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - ./rabbitmq:/bitnami
+    env_file: .env
+
+  zookeeper:
+    hostname: zookeeper
+    container_name: zookeeper
+    image: 'bitnami/zookeeper:latest'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  nifi:
+    image: apache/nifi
+    ports:
+      - "8080:8080" # Unsecured HTTP Web Port
+    volumes:
+      - ./nifi/nifi_state:/opt/nifi/nifi-current/state
+      - ./nifi/nifi_db:/opt/nifi/nifi-current/database_repository
+      - ./nifi/nifi_flowfile:/opt/nifi/nifi-current/flowfile_repository
+      - ./nifi/nifi_content:/opt/nifi/nifi-current/content_repository
+      - ./nifi/nifi_provenance:/opt/nifi/nifi-current/provenance_repository
