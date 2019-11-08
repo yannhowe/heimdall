@@ -8,7 +8,7 @@ docker-compose up
 
 # Create activity in localhost/raw-media-bucket to see events
 mc config host add localhost http://localhost:9000 TESTINGTESTING123 TESTINGTESTING123TESTINGTESTING123
-mc admin config set localhost < minio.config
+mc admin config set localhost < ./init/minio.config
 mc admin service restart localhost
 watch -n 0.5  mc cp README.md localhost/raw-media-bucket/README.md
 ```
