@@ -8,9 +8,10 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - './minio/data:/data'
+      - 'minio:/data'
     env_file: .env
     command: server /data
+    restart: always
 
   rabbitmq:
     image: 'bitnami/rabbitmq:latest'
@@ -20,23 +21,18 @@ services:
       - '5672:5672'
       - '15672:15672'
     volumes:
-      - ./rabbitmq:/bitnami
+      - rabbit:/bitnami
     env_file: .env
+    restart: always
+    
+  init:
+    hostname: init
+    build: ./init
+    env_file: .env
+    command: ["./wait-for-it.sh" , "rabbitmq:15672" , "--strict" , "--timeout=300" , "--" , "sh" , "script.sh"]
+    restart: on-failure
+    depends_on: ['rabbitmq']
 
-  zookeeper:
-    hostname: zookeeper
-    container_name: zookeeper
-    image: 'bitnami/zookeeper:latest'
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-
-  nifi:
-    image: apache/nifi
-    ports:
-      - "8080:8080" # Unsecured HTTP Web Port
-    volumes:
-      - ./nifi/nifi_state:/opt/nifi/nifi-current/state
-      - ./nifi/nifi_db:/opt/nifi/nifi-current/database_repository
-      - ./nifi/nifi_flowfile:/opt/nifi/nifi-current/flowfile_repository
-      - ./nifi/nifi_content:/opt/nifi/nifi-current/content_repository
-      - ./nifi/nifi_provenance:/opt/nifi/nifi-current/provenance_repository
+volumes:
+  minio:
+  rabbit:

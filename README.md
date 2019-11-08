@@ -1,8 +1,9 @@
-## Scratchpad
+# Get Started
 
-https://blog.minio.io/part-1-3-publish-minio-events-via-rabbitmq-8dd747632623
+```
+# Clone this repo, rename .env.example to .env, customize if you need..
+# Up Everything
+docker-compose up
 
-watch mc cp ./data/test-video.mp4 localhost/video
-
-mc admin config set localhost/ < ./minio/minio.config
-mc admin service restart localhost/
+# Go here to see queue - http://localhost:15672/#/queues/%2F/raw-media-bucket
+```
