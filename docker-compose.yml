@@ -29,9 +29,19 @@ services:
     hostname: init
     build: ./init
     env_file: .env
-    command: ["./wait-for-it.sh" , "rabbitmq:15672" , "--strict" , "--timeout=300" , "--" , "sh" , "script.sh"]
+    command: ["./wait-for-it.sh" , "rabbitmq:15672" , "--strict" , "--timeout=300" , "--" , "bash" , "./script.sh"]
     restart: on-failure
     depends_on: ['rabbitmq']
+
+  ffmpeg:
+    hostname: ffmpeg
+    build: ./ffmpeg
+    env_file: .env
+    restart: always
+    command: ["./wait-for-it.sh" , "rabbitmq:15672" , "--strict" , "--timeout=300" , "--" , "bash" , "./script.sh"]
+    depends_on: ['rabbitmq']
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   minio:

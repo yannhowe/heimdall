@@ -8,7 +8,7 @@ docker_session = docker.from_env()
 
 # Connect to Rabbit MQ
 rabbitmq_host = "localhost"
-# rabbitmq_host = os.getenv('RABBITMQ_HOST', 'Token Not found')
+rabbitmq_host = os.getenv('RABBITMQ_HOST', 'Token Not found')
 rabbitmq_username = os.getenv('RABBITMQ_USERNAME', 'Token Not found')
 rabbitmq_password = os.getenv('RABBITMQ_PASSWORD', 'Token Not found')
 rabbitmq_exchange_name = os.getenv('RABBITMQ_MINIO_EXCHANGE', 'Token Not found')
@@ -25,6 +25,7 @@ channel.queue_declare(queue=rabbitmq_queue_name)
 def callback(ch, method, properties, body):
     event = json.loads(body)
     print(event["Key"])
+    print("hello world")
     docker_session.containers.run("alpine", "echo hello")
 
 channel.basic_consume(queue=rabbitmq_queue_name,
