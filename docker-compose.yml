@@ -38,9 +38,10 @@ services:
     build: ./ffmpeg
     env_file: .env
     restart: always
-    command: ["./wait-for-it.sh" , "rabbitmq:15672" , "--strict" , "--timeout=300" , "--" , "bash" , "./script.sh"]
+    entrypoint: ["./wait-for-it.sh" , "rabbitmq:15672" , "--strict" , "--timeout=300" , "--" , "bash" , "./script.sh"]
     depends_on: ['rabbitmq']
     volumes: 
+      - ./videos:/tmp
       - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:

@@ -1,10 +1,7 @@
 import os
 import pika
-import docker
 import json
-
-# Connect to docker
-docker_session = docker.from_env()
+import ffmpeg
 
 # Connect to Rabbit MQ
 rabbitmq_host = "localhost"
@@ -25,8 +22,7 @@ channel.queue_declare(queue=rabbitmq_queue_name)
 def callback(ch, method, properties, body):
     event = json.loads(body)
     print(event["Key"])
-    print("hello world")
-    docker_session.containers.run("alpine", "echo hello")
+    ffmpeg.input('/tmp/joker.mkv').output('/tmp/joker.wav', acodec='pcm_s16le', ac=1, ar='8000').run()
 
 channel.basic_consume(queue=rabbitmq_queue_name,
                       auto_ack=True,
