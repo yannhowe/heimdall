@@ -1,0 +1,14 @@
+FROM jrottenberg/ffmpeg:4.1-ubuntu
+
+RUN apt-get update \
+    && apt-get install -y python3-pip python3-dev \
+    && cd /usr/local/bin \
+    && ln -s /usr/bin/python3 python \
+    && pip3 install --upgrade pip
+
+WORKDIR /usr/src/app
+
+COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENTRYPOINT [ "./script.sh" ]
