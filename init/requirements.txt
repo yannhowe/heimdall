@@ -1,4 +1,4 @@
-certifi==2019.9.11
+certifi==2023.7.22
 future==0.18.2
 minio==5.0.4
 pika==1.1.0
